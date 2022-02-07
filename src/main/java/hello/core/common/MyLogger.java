@@ -1,6 +1,7 @@
 package hello.core.common;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -8,7 +9,7 @@ import javax.annotation.PreDestroy;
 import java.util.UUID;
 
 @Component
-@Scope(value = "request")
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS) // CGLIB라는 라이브러리로 내 클래스를 상속 받은 가짜 프록시 객체를 만들어서 주입함
 public class MyLogger {
 
     private String uuid;
@@ -19,8 +20,7 @@ public class MyLogger {
     }
 
     public void log(String message) {
-        System.out.println("[" + uuid + "]" + "[" + requestURL + "] " +
-                message);
+        System.out.println("[" + uuid + "]" + "[" + requestURL + "] " + message);
     }
 
     @PostConstruct
